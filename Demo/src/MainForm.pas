@@ -9,7 +9,7 @@ uses
   FMX.StdCtrls, FMX.Layouts, FMX.Edit, FMX.Memo,
   Terminal.Control, System.Skia, FMX.Memo.Types, FMX.ScrollBox, FMX.Skia,
   FMX.Controls.Presentation, ScSSHClient, ScBridge, ScSSHChannel, FMX.ListBox,Terminal.Types,
-  Terminal.Theme, ScUtils, FMX.Objects;
+  Terminal.Theme, ScUtils, FMX.Objects, FMX.Dialogs;
 
 type
   TFormMain = class(TForm)
@@ -28,7 +28,6 @@ type
     ButtonTest5: TButton;
     sshShell: TScSSHShell;
     ScSSHClient1: TScSSHClient;
-    cbTheme: TComboBox;
     SFS: TScFileStorage;
     edHostName: TEdit;
     edUser: TEdit;
@@ -39,11 +38,13 @@ type
     Label3: TLabel;
     edPassword: TEdit;
     btConnect: TButton;
-    Label4: TLabel;
     Layout2: TLayout;
     Label5: TLabel;
     btClear: TButton;
     Rectangle1: TRectangle;
+    odTheme: TOpenDialog;
+    btLoadTheme: TButton;
+    btThemeDefault: TButton;
     procedure Button1Click(Sender: TObject);
     procedure btConnectClick(Sender: TObject);
     procedure ButtonTest1Click(Sender: TObject);
@@ -60,11 +61,10 @@ type
     procedure TerminalResized(Sender: TObject);
     procedure sshShellConnect(Sender: TObject);
     procedure ScSSHClient1AfterDisconnect(Sender: TObject);
-    // procedure Panel1KeyDown(Sender: TObject; var Key: Word; var KeyChar: WideChar; Shift: TShiftState); // Убрал, нет реализации
-    procedure cbThemeChange(Sender: TObject);
     procedure ScSSHClient1ServerKeyValidate(Sender: TObject; NewServerKey: TScKey;
         var Accept: Boolean);
     procedure btClearClick(Sender: TObject);
+    procedure btLoadThemeClick(Sender: TObject);
   private
     procedure LoadExampleCommands;
     procedure TerminalDataHandler(const S: string);
@@ -76,9 +76,6 @@ var
   FormMain: TFormMain;
 
 implementation
-
-uses
-  FMX.Dialogs;
 
 {$R *.fmx}
 
@@ -111,9 +108,9 @@ end;
 
 procedure TFormMain.btConnectClick(Sender: TObject);
 begin
-//  ScSSHClient1.HostName:=edHostName.Text;
-//  ScSSHClient1.User:=edUser.Text;
-//  ScSSHClient1.Password:=edPassword.Text;
+  ScSSHClient1.HostName:=edHostName.Text;
+  ScSSHClient1.User:=edUser.Text;
+  ScSSHClient1.Password:=edPassword.Text;
 
   sshShell.TerminalInfo.Cols := Terminal.Cols;
   sshShell.TerminalInfo.Rows := Terminal.Rows;
@@ -151,20 +148,6 @@ begin
   Terminal.WriteText(#13#10#13#10);
 end;
 
-procedure TFormMain.cbThemeChange(Sender: TObject);
-var
-  LTheme: TTerminalTheme;
-begin
-  LTheme := TTerminalTheme.Create;
-  try
-    LTheme.LoadThemeFromFile(cbTheme.Text);
-    Terminal.Theme := LTheme;
-  finally
-    LTheme.Free;
-  end;
-  Terminal.SetFocus;
-end;
-
 procedure TFormMain.ButtonTest1Click(Sender: TObject);
 begin
   Terminal.WriteText('=== Color Test ==='#13#10);
@@ -200,6 +183,22 @@ procedure TFormMain.btDisconnectClick(Sender: TObject);
 begin
   ScSSHClient1.Disconnect;
   Terminal.Clear;
+end;
+
+procedure TFormMain.btLoadThemeClick(Sender: TObject);
+var
+  LTheme: TTerminalTheme;
+begin
+  if not odTheme.Execute then exit;
+
+  LTheme := TTerminalTheme.Create;
+  Ltheme.LoadThemeFromFile(odTheme.FileName);
+  try
+    Terminal.Theme := LTheme;
+  finally
+    LTheme.Free;
+  end;
+  Terminal.SetFocus;
 end;
 
 procedure TFormMain.ButtonSendClick(Sender: TObject);

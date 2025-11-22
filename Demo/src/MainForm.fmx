@@ -15,17 +15,9 @@ object FormMain: TFormMain
     Size.Height = 105.000000000000000000
     Size.PlatformDefault = False
     TabOrder = 0
-    object cbTheme: TComboBox
-      Position.X = 376.000000000000000000
-      Position.Y = 33.000000000000000000
-      Size.Width = 168.000000000000000000
-      Size.Height = 24.000000000000000000
-      Size.PlatformDefault = False
-      TabOrder = 0
-    end
     object edHostName: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 4
+      TabOrder = 3
       Position.X = 88.000000000000000000
       Position.Y = 6.000000000000000000
       Size.Width = 193.000000000000000000
@@ -34,7 +26,7 @@ object FormMain: TFormMain
     end
     object edUser: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 3
+      TabOrder = 2
       Position.X = 88.000000000000000000
       Position.Y = 33.000000000000000000
       Size.Width = 193.000000000000000000
@@ -47,7 +39,7 @@ object FormMain: TFormMain
       Size.Width = 432.000000000000000000
       Size.Height = 105.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 6
+      TabOrder = 4
       object Rectangle1: TRectangle
         Align = Client
         Margins.Left = 3.000000000000000000
@@ -127,7 +119,7 @@ object FormMain: TFormMain
       Size.Width = 79.000000000000000000
       Size.Height = 37.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 11
+      TabOrder = 9
       Text = 'Disconnect'
       TextSettings.Trimming = None
       OnClick = btDisconnectClick
@@ -140,7 +132,7 @@ object FormMain: TFormMain
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = 'Host'
-      TabOrder = 10
+      TabOrder = 8
     end
     object Label2: TLabel
       Position.X = 16.000000000000000000
@@ -150,7 +142,7 @@ object FormMain: TFormMain
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = 'User'
-      TabOrder = 9
+      TabOrder = 7
     end
     object Label3: TLabel
       Position.X = 16.000000000000000000
@@ -160,11 +152,11 @@ object FormMain: TFormMain
       Size.PlatformDefault = False
       TextSettings.HorzAlign = Trailing
       Text = 'Password'
-      TabOrder = 8
+      TabOrder = 6
     end
     object edPassword: TEdit
       Touch.InteractiveGestures = [LongTap, DoubleTap]
-      TabOrder = 1
+      TabOrder = 0
       Password = True
       Position.X = 88.000000000000000000
       Position.Y = 63.000000000000000000
@@ -178,16 +170,31 @@ object FormMain: TFormMain
       Size.Width = 79.000000000000000000
       Size.Height = 37.000000000000000000
       Size.PlatformDefault = False
-      TabOrder = 2
+      TabOrder = 1
       Text = 'Connect'
       TextSettings.Trimming = None
       OnClick = btConnectClick
     end
-    object Label4: TLabel
-      Position.X = 376.000000000000000000
+    object btLoadTheme: TButton
+      Position.X = 424.000000000000000000
       Position.Y = 8.000000000000000000
-      Text = 'Theme'
-      TabOrder = 5
+      Size.Width = 80.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 11
+      Text = 'Load theme'
+      TextSettings.Trimming = None
+      OnClick = btLoadThemeClick
+    end
+    object btThemeDefault: TButton
+      Position.X = 424.000000000000000000
+      Position.Y = 48.000000000000000000
+      Size.Width = 80.000000000000000000
+      Size.Height = 37.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      Text = 'Default theme'
+      TextSettings.Trimming = None
     end
   end
   object LayoutBottom: TLayout
@@ -280,6 +287,10 @@ object FormMain: TFormMain
       end
     end
   end
+  object odTheme: TOpenDialog
+    Left = 728
+    Top = 208
+  end
   object sshShell: TScSSHShell
     Client = ScSSHClient1
     OnAsyncReceive = sshShellAsyncReceive
@@ -293,9 +304,6 @@ object FormMain: TFormMain
     Top = 140
   end
   object ScSSHClient1: TScSSHClient
-    HostName = '192.168.100.23'
-    User = 'root'
-    Password = 'Jonimcham2'
     KeyStorage = SFS
     OnServerKeyValidate = ScSSHClient1ServerKeyValidate
     Left = 848
@@ -310,6 +318,5 @@ object FormMain: TFormMain
   object SFS: TScFileStorage
     Left = 840
     Top = 152
-    Path = 'Z:\projects\ssh\$(Platform)\$(Config)'
   end
 end
